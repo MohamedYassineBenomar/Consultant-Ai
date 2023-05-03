@@ -1,0 +1,8 @@
+Flask
+langchain
+unstructured
+pdfminer.six
+pinecone-client
+openai
+tiktoken
+gunicorn

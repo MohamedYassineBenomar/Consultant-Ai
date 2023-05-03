@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+    
+        #question-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+        }
+    
+        label {
+            display: block;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+    
+        input[type="text"],
+        textarea {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+    
+        input[type="text"]:invalid,
+        textarea:invalid {
+            border-color: #ff4136;
+        }
+    
+        input[type="text"]:valid,
+        textarea:valid {
+            border-color: #2ecc40;
+        }
+    
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #007bff;
+        }
+    
+        button[type="submit"] {
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 1rem;
+            border: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s ease-in-out;
+        }
+    
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    
+        #response {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1rem;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+        }
+    
+        #response h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+    
+        #response p {
+            font-size: 1rem;
+            color: #666;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <h1 class="animate__animated animate__fadeInDown">Ask your question about the Moroccan work and penal code</h1>
+    <form id="question-form" class="animate__animated animate__fadeInUp">
+        <label for="situation">Your Situation:</label>
+        <textarea id="situation" name="situation" rows="4" placeholder="Describe your situation here..." required></textarea>
+        <label for="question">Your Question:</label>
+        <input type="text" id="question" name="question" rows="4" placeholder="Write your question here..." required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="response">
+        <h2>Response:</h2>
+        <p id="answer"></p>
+    </div>
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById("question-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            console.log("Form submitted");
+            const question = "My Situation : "+document.getElementById("situation").value + ", My Question : " + document.getElementById("question").value ;
+            console.log(document.getElementById("situation").value + document.getElementById("question").value);
+            const responseDiv = document.getElementById("answer");
+
+            responseDiv.innerText = "Loading...";
+
+            const response = await fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({ situation, question }),
+            });
+            const data = await response.text();
+            console.log('Response data:', data);
+
+            try {
+                responseDiv.innerText = data;
+            } catch (error) {
+                console.error('Error:', error);
+                responseDiv.innerText = "An error occurred. Please try again.";
+            }
+
+            // Smooth scrolling to response section
+            $('html, body').animate({
+                scrollTop: $("#response").offset().top
+            }, 1000);
+        });
+        
+    </script>
+</body>
+</html>
