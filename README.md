@@ -1,4 +1,4 @@
-# Consultations
+# Consultant Ai
 Consultations Website
 
 Using HTML/CSS/JS/Python flask/chat gpt api
